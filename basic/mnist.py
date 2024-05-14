@@ -1,5 +1,6 @@
-from pathlib import Path
+import pathlib
 import pandas as pd
+from configs.path_internal import project_root_path
 
 
 class Mnist(object):
@@ -9,8 +10,8 @@ class Mnist(object):
 
     def __init__(self):
 
-        self.train_path = Path('../data/mnist_train.csv')
-        self.test_path = Path('../data/mnist_test.csv')
+        self.train_path = f"{project_root_path}/data/mnist_train.csv"
+        self.test_path = f'{project_root_path}/data/mnist_test.csv'
 
         self.train_data, self.train_label = self.load(self.train_path)
         self.test_data, self.test_label = self.load(self.test_path)
