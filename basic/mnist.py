@@ -1,7 +1,7 @@
 import pathlib
 import pandas as pd
 from configs.path_internal import project_root_path
-
+import numpy as np
 
 class Mnist(object):
     """
@@ -10,11 +10,13 @@ class Mnist(object):
 
     def __init__(self):
 
-        self.train_path = f"{project_root_path}/data/mnist_train.csv"
-        self.test_path = f'{project_root_path}/data/mnist_test.csv'
+        self.train_data_path = f"{project_root_path}/data/MNIST/train_images.csv"
+        self.train_label_path = f"{project_root_path}/data/MNIST/train_labels.csv"
+        self.test_data_path = f'{project_root_path}/data/MNIST/test_images.csv'
+        self.test_label_path = f"{project_root_path}/data/MNIST/test_labels.csv"
 
-        self.train_data, self.train_label = self.load(self.train_path)
-        self.test_data, self.test_label = self.load(self.test_path)
+        self.train_data, self.train_label = self.__load__(train=True)
+        self.test_data, self.test_label = self.__load__(train=False)
 
     def get_data(self, train=True):
         if train:
@@ -22,16 +24,17 @@ class Mnist(object):
         else:
             return self.test_data, self.test_label
 
-    def load(self, file):
+    def __load__(self, train=True):
         """
-        读取数据集，第一列为标签列，其余为数据列
-        :param file: csv文件位置
+        读取数据集
+        :param train: 确定获取训练数据/测试数据
         :return:
         """
-        df = pd.read_csv(file, header=None)
-
-        labels = df[df.columns[0]].apply(lambda x: 0 if x == 0 else -1).values.tolist()
-
-        data = df[df.columns[1:]].values.tolist()
+        if train:
+            data = pd.read_csv(self.train_data_path, header=None)
+            labels = pd.read_csv(self.train_label_path, header=None)
+        else:
+            data = pd.read_csv(self.test_data_path, header=None)
+            labels = pd.read_csv(self.test_label_path, header=None)
 
         return data, labels
